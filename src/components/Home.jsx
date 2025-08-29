@@ -18,7 +18,7 @@ const Home = () => {
       if (paste) {
         setTitle(paste.title);
         setValue(paste.content);
-        toast.success("Loaded paste for editing ✏️");
+        
       } else {
         toast.error("Paste not found ❌");
       }
