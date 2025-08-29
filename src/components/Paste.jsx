@@ -81,7 +81,7 @@ const Paste = () => {
                       {/* Edit */}
                       <Link
                         to={`/?pasteId=${paste?._id}`}
-                        onClick={() => toast("Editing paste ✏️")}
+                       
                         className="p-2 rounded-[0.2rem] bg-white border border-[#c7c7c7] hover:bg-transparent hover:border-blue-500 group"
                       >
                         <PencilLine
