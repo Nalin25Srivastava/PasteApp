@@ -1,7 +1,8 @@
-import React, { useState, textarea, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
-import { addToPaste, updatePaste, removeFromPaste } from "../slices/PasteSlice";
+import { addToPaste, updatePaste } from "../slices/PasteSlice";
+import toast from "react-hot-toast";
 
 const Home = () => {
   const [title, setTitle] = useState("");
@@ -10,34 +11,54 @@ const Home = () => {
   const pasteId = searchparams.get("pasteId");
   const allpastes = useSelector((state) => state.paste.pastes);
   const dispatch = useDispatch();
+
   useEffect(() => {
     if (pasteId) {
       const paste = allpastes.find((p) => p._id.toString() === pasteId);
       if (paste) {
         setTitle(paste.title);
         setValue(paste.content);
+        toast.success("Loaded paste for editing ✏️");
+      } else {
+        toast.error("Paste not found ❌");
       }
     }
   }, [pasteId, allpastes]);
+
   const createPaste = () => {
+    if (!title.trim()) {
+      toast.error("Title cannot be empty ⚠️");
+      return;
+    }
+    if (!value.trim()) {
+      toast.error("Content cannot be empty ⚠️");
+      return;
+    }
+
     const paste = {
       title: title,
       content: value,
       _id: pasteId || Date.now().toString(36),
-      createAt: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
+      updatedAt: pasteId ? new Date().toISOString() : null,
     };
+
     if (pasteId) {
-      //update
+      // update
       dispatch(updatePaste(paste));
+      toast.success("Paste updated successfully ✅");
     } else {
-      //create
+      // create
       dispatch(addToPaste(paste));
+      toast.success("Paste created successfully 🎉");
     }
-    //after creattion / updation
+
+    // after creation / updation
     setTitle("");
     setValue("");
     setSearchparams({});
   };
+
   return (
     <>
       <div>

@@ -14,10 +14,12 @@ const Paste = () => {
 
   const handleDelete = (id) => {
     dispatch(removeFromPaste(id));
+    toast.error("Paste deleted successfully ❌");
   };
 
   const handleAdd = () => {
     navigate("/"); // redirect to home page (create new paste page)
+    toast.success("Redirecting to create a new paste ✍️");
   };
 
   // ✅ Filter by title or content
@@ -47,7 +49,7 @@ const Paste = () => {
         {/* Add Paste Button */}
         <Link
           onClick={handleAdd}
-          className="border px-4 py-2 rounded  text-white w-fit"
+          className="border px-4 py-2 rounded text-white w-fit"
         >
           Add Paste
         </Link>
@@ -63,10 +65,10 @@ const Paste = () => {
               sortedPastes.map((paste) => (
                 <div
                   key={paste?._id}
-                  className=" w-full gap-y-4 justify-between flex flex-col sm:flex-row"
+                  className="w-full gap-y-4 justify-between flex flex-col sm:flex-row"
                 >
                   {/* Title & Content */}
-                  <div className=" flex flex-col">
+                  <div className="flex flex-col">
                     <p className="text-4xl font-semibold">{paste?.title}</p>
                     <p className="text-xl font-normal line-clamp-3 max-w-[100%]">
                       {paste?.content}
@@ -79,6 +81,7 @@ const Paste = () => {
                       {/* Edit */}
                       <Link
                         to={`/?pasteId=${paste?._id}`}
+                        onClick={() => toast("Editing paste ✏️")}
                         className="p-2 rounded-[0.2rem] bg-white border border-[#c7c7c7] hover:bg-transparent hover:border-blue-500 group"
                       >
                         <PencilLine
@@ -87,13 +90,11 @@ const Paste = () => {
                         />
                       </Link>
 
-                      {/* Delete */}
-
                       <Link
                         to="#"
                         onClick={() => handleDelete(paste?._id)}
                         className="p-2 rounded-[0.2rem] bg-white border border-[#c7c7c7] 
-             hover:bg-transparent hover:border-pink-500 group"
+                          hover:bg-transparent hover:border-pink-500 group"
                       >
                         <Trash2
                           className="text-black group-hover:text-pink-500"
@@ -101,13 +102,14 @@ const Paste = () => {
                         />
                       </Link>
 
-                      {/* View ✅ FIXED */}
+                      {/* View */}
                       <Link
                         to={`/paste/${paste._id}`}
+                        onClick={() => toast("Viewing paste 👀")}
                         className="p-2 rounded-[0.2rem] bg-white border border-[#c7c7c7] hover:bg-transparent hover:border-orange-500 group"
                       >
                         <Eye
-                          className="text-black  group-hover:text-orange-500"
+                          className="text-black group-hover:text-orange-500"
                           size={20}
                         />
                       </Link>
@@ -118,7 +120,7 @@ const Paste = () => {
                         onClick={(e) => {
                           e.preventDefault(); // prevent unwanted navigation
                           navigator.clipboard.writeText(paste?.content);
-                          toast.success("Copied to Clipboard");
+                          toast.success("Copied to Clipboard ✅");
                         }}
                         className="p-2 rounded-[0.2rem] bg-white border border-[#c7c7c7] hover:bg-transparent hover:border-green-500 group"
                       >
@@ -131,7 +133,6 @@ const Paste = () => {
 
                     {/* Date */}
                     <div className="gap-x-2 flex items-center">
-                      {/* <Calendar className="text-black" size={20} /> */}
                       <span>{FormatDate(paste?.createdAt)}</span>
                     </div>
                   </div>
